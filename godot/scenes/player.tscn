@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://eglr2lg7ivti"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s15jp"]
+radius = 2.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_btl5d"]
+radius = 2.0
+height = 4.0
+
+[node name="player" type="CharacterBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_s15jp")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="CollisionShape2D"]
+mesh = SubResource("SphereMesh_btl5d")
