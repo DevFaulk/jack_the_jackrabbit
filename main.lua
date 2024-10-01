@@ -1,63 +1,66 @@
 require("snake")
 
+-- Initialize the Snake module with segments
+Snake = {}
+Snake.segments = {
+	{ x = 5, y = 5 } -- Starting position of the snake's head
+}
+
+function tablelength(T)
+	local count = 0
+	for _ in pairs(T) do count = count + 1 end
+	return count
+end
+
 -- Handle game quit
 function love.keypressed(key)
-  if key == "escape" then
-    love.event.quit()
-  end
-  -- Handle snake movement
-  if key == "right" or key == "left" or key == "down" or key == "up" then
-    local slide = 1
-    lastKey = key
+	if key == "escape" then
+		love.event.quit()
+	end
 
-    local segments = ipairs(Snake.segments)
-    for index, segment in segments do
-      if key == "right" or lastKey == "right" then
-        segment.x = segment.x + slide
-        if index > 0 then
-          
-        end
-      end
-      if key == "left" or lastKey == "left" then
-        segment.x = segment.x - slide
-      end
-      if key == "up" or lastKey == "up" then
-        segment.y = segment.y - slide
-      end
-      if key == "down" or lastKey == "down" then
-        segment.y = segment.y + slide
-      end
-      if index > 0 or index == len(segments) then
-        lastKey = key
-      end
+	-- Handle snake movement
+	if key == "right" or key == "left" or key == "down" or key == "up" then
+		print(key)
+	end
 
-      for index, slide in 
+	local head = Snake.segments[1]
 
-    end
-    print(lastKey)   -- uncomment to debug for last key pressed
-  end
+	if key == "right" then
+		head.x = head.x + 1
+	elseif key == "left" then
+		head.x = head.x - 1
+	elseif key == "down" then
+		head.y = head.y + 1
+	elseif key == "up" then
+		head.y = head.y - 1
+	end
+
+	-- Update the rest of the segments to follow the head
+	for i = #Snake.segments, 2, -1 do
+		Snake.segments[i].x = Snake.segments[i - 1].x
+		Snake.segments[i].y = Snake.segments[i - 1].y
+	end
 end
 
 function love.draw()
-  local gridXCount = 20
-  local gridYCount = 15
-  local cellSize = 20
+	local cellSize = 20
 
-  scoreSoFar = 0
-
-  for segmentIndex, segment in ipairs(Snake.segments) do
-    score(scoreSoFar, segment, cellSize)
-  end
+	for _, segment in ipairs(Snake.segments) do
+		buildSnake(segment, cellSize)
+	end
 end
 
-function score(scoreSoFar, segment, cellSize)
-  scoreSoFar = scoreSoFar + 1 --increment score so far
-  love.graphics.setColor(.9, .9, .9)
-  love.graphics.rectangle(
-    'fill',
-    (segment.x - 1) * cellSize,
-    (segment.y - 1) * cellSize,
-    cellSize - 1,
-    cellSize - 1
-  )
+function buildSnake(segment, cellSize)
+	love.graphics.setColor(0.9, 0.9, 0.9)
+	love.graphics.rectangle(
+		'fill',
+		(segment.x - 1) * cellSize,
+		(segment.y - 1) * cellSize,
+		cellSize - 1,
+		cellSize - 1
+	)
+end
+
+function love.load()
+	-- Additional initialization if needed
 end
