@@ -1,3 +1,10 @@
+-- Handle game quit
+function love.keypressed(key)
+  if key == "escape" then
+    love.event.quit()
+  end
+end
+
 function love.draw()
     local gridXCount = 20
     local gridYCount = 15
