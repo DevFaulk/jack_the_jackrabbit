@@ -4,8 +4,8 @@ extends CharacterBody2D
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 
 # Properties
-@export var speed = 250.0
-@export var jumpVelocity = -400.0
+@export var speed = 300.0
+@export var jumpVelocity = -300.0
 var animation_to_play = "idle"
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 @export var jumpCount : float = 0
@@ -30,30 +30,36 @@ func _physics_process(delta):
 		animated_sprite_2d.flip_h = true
 	if Input.is_action_just_pressed("right"):
 		animated_sprite_2d.flip_h = false
-		
+	
+	# Check if the character is on the wall and set animation
+	if is_on_wall_only():
+		animation_to_play = "wallJump"
+		jumpCount = 0
+
+	# Reset jump count when on floor or wall
 	if is_on_floor() or is_on_wall():
 		jumpCount = 0
+
 	# Handle Jump
-	if Input.is_action_just_pressed("jump") and is_on_floor() and jumpCount == 0:
-		velocity.y = jumpVelocity
-		animation_to_play = "jump"
-		Input.action_release("ui_accept")
-		jumpCount = 1
-		
-		# Handle double jump
-		if Input.is_action_just_pressed("jump") and not is_on_floor() and jumpCount == 1:
-			
-			velocity.y = jumpVelocity * 2
+	if Input.is_action_just_pressed("jump"):
+		if is_on_floor() or is_on_wall_only() and jumpCount == 0:
+			if is_on_floor():
+				velocity.y = jumpVelocity
+			if is_on_wall_only():
+				velocity.y = -600
+				velocity.x = -900
+			animation_to_play = "jump"
+			jumpCount = 1
+		elif jumpCount == 1:  # Handle double jump
+			velocity.y = jumpVelocity
+			animation_to_play = "doubleJump"
 			jumpCount = 2
-			while not is_on_floor(): 
-				animation_to_play = "doubleJump"
-	# Reset velocity
-	if not is_on_floor() and jumpCount != 2:
+
+	# Reset velocity and handle falling
+	if not is_on_floor() and not is_on_wall_only():
 		velocity += get_gravity() * delta
-		animation_to_play = "fall"
-		
-			
-		
+		if jumpCount == 0:
+			animation_to_play = "fall"
 	# All movement animations named appropriately
 	animated_sprite_2d.play(animation_to_play)
 	

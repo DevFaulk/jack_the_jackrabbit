@@ -360,7 +360,7 @@ shape = SubResource("CircleShape2D_s15jp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_1aymk")
-animation = &"idle"
+animation = &"wallJump"
 speed_scale = 2.0
 offset = Vector2(0, -3.635)
 
