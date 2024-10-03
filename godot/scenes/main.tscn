@@ -197,13 +197,3 @@ tile_set = SubResource("TileSet_4xevv")
 
 [node name="player" parent="." instance=ExtResource("2_d8o2v")]
 position = Vector2(573, 360)
-
-[node name="Camera2D" type="Camera2D" parent="player"]
-position = Vector2(-286.5, -180)
-scale = Vector2(0.5, 0.5)
-anchor_mode = 0
-position_smoothing_enabled = true
-drag_horizontal_enabled = true
-drag_vertical_enabled = true
-drag_horizontal_offset = -0.21
-drag_vertical_offset = 0.17

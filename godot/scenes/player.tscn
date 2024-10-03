@@ -1,16 +1,17 @@
-[gd_scene load_steps=54 format=3 uid="uid://eglr2lg7ivti"]
+[gd_scene load_steps=56 format=3 uid="uid://eglr2lg7ivti"]
 
 [ext_resource type="Texture2D" uid="uid://bybebh6adx86k" path="res://assets/PixelAdventure/Main Characters/Virtual Guy/Double Jump (32x32).png" id="1_1n3rf"]
 [ext_resource type="Script" path="res://src/player.gd" id="1_ndrtq"]
 [ext_resource type="Texture2D" uid="uid://dlx2p8pevprsx" path="res://assets/PixelAdventure/Main Characters/Virtual Guy/Fall (32x32).png" id="2_gpykc"]
+[ext_resource type="Script" path="res://splash_area.gd" id="2_n2v7g"]
 [ext_resource type="Texture2D" uid="uid://s2oehkqtuxx0" path="res://assets/PixelAdventure/Main Characters/Virtual Guy/Hit (32x32).png" id="3_x57cu"]
 [ext_resource type="Texture2D" uid="uid://c47wtfnrxfge5" path="res://assets/PixelAdventure/Main Characters/Virtual Guy/Idle (32x32).png" id="4_66gqv"]
 [ext_resource type="Texture2D" uid="uid://yo3ttgeggsqj" path="res://assets/PixelAdventure/Main Characters/Virtual Guy/Jump (32x32).png" id="5_vgu37"]
 [ext_resource type="Texture2D" uid="uid://d2spm2dkyrhxu" path="res://assets/PixelAdventure/Main Characters/Virtual Guy/Run (32x32).png" id="6_e2adu"]
 [ext_resource type="Texture2D" uid="uid://ddcg5tr7xcbta" path="res://assets/PixelAdventure/Main Characters/Virtual Guy/Wall Jump (32x32).png" id="7_bk8qa"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_s15jp"]
-radius = 13.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_dfhbl"]
+radius = 60.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5qvu4"]
 atlas = ExtResource("1_1n3rf")
@@ -351,12 +352,21 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_s15jp"]
+radius = 13.0
+
 [node name="player" type="CharacterBody2D"]
 scale = Vector2(2, 2)
 script = ExtResource("1_ndrtq")
+speed = null
+jumpVelocity = null
+jumpCount = null
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_s15jp")
+[node name="splashArea" type="Area2D" parent="."]
+script = ExtResource("2_n2v7g")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="splashArea"]
+shape = SubResource("CircleShape2D_dfhbl")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_1aymk")
@@ -365,3 +375,18 @@ speed_scale = 2.0
 offset = Vector2(0, -3.635)
 
 [node name="fallDelay" type="Timer" parent="."]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(-286.5, -180)
+scale = Vector2(0.5, 0.5)
+anchor_mode = 0
+position_smoothing_enabled = true
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_horizontal_offset = -0.21
+drag_vertical_offset = 0.17
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_s15jp")
+
+[connection signal="body_entered" from="splashArea" to="splashArea" method="_on_body_entered"]
